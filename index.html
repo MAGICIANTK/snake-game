@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Snake Eats MAGICIANTK</title>
+    <style>
+        body { background: #0d1117; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; font-family: sans-serif; }
+        canvas { border: 2px solid #58a6ff; background: #161b22; }
+        h1 { margin-bottom: 10px; color: #58a6ff; }
+    </style>
+</head>
+<body>
+    <h1>Snake Eats MAGICIANTK</h1>
+    <canvas id="gameCanvas" width="400" height="400"></canvas>
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+        const name = "MAGICIANTK";
+        let snake = [{x: 10, y: 10}];
+        let velocity = {x: 0, y: 0};
+        let food = {x: 5, y: 5, char: name[0]};
+        let foodIndex = 0;
+        let score = 0;
+
+        function draw() {
+            ctx.clearRect(0, 0, 400, 400);
+            ctx.fillStyle = "#9C27B0"; // Purple Snake
+            snake.forEach(part => ctx.fillRect(part.x * 20, part.y * 20, 18, 18));
+            ctx.fillStyle = "white";
+            ctx.font = "20px Arial";
+            ctx.fillText(food.char, food.x * 20 + 2, food.y * 20 + 16);
+            
+            // Move Snake
+            let head = {x: snake[0].x + velocity.x, y: snake[0].y + velocity.y};
+            snake.unshift(head);
+            if (head.x === food.x && head.y === food.y) {
+                score++;
+                foodIndex = (foodIndex + 1) % name.length;
+                food = {x: Math.floor(Math.random()*20), y: Math.floor(Math.random()*20), char: name[foodIndex]};
+            } else { snake.pop(); }
+        }
+
+        window.addEventListener('keydown', e => {
+            if(e.key === 'ArrowUp' && velocity.y === 0) velocity = {x: 0, y: -1};
+            if(e.key === 'ArrowDown' && velocity.y === 0) velocity = {x: 0, y: 1};
+            if(e.key === 'ArrowLeft' && velocity.x === 0) velocity = {x: -1, y: 0};
+            if(e.key === 'ArrowRight' && velocity.x === 0) velocity = {x: 1, y: 0};
+        });
+        setInterval(draw, 100);
+    </script>
+</body>
+</html>
